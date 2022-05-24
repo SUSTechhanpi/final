@@ -85,8 +85,8 @@ public class Chessboard extends JComponent {
         initRookOnBoard(0, CHESSBOARD_SIZE - 1, ChessColor.BLACK);
         initRookOnBoard(CHESSBOARD_SIZE - 1, 0, ChessColor.WHITE);
         initRookOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 1, ChessColor.WHITE);
-        initKingOnBoard(0,3,ChessColor.BLACK);
-        initKingOnBoard(CHESSBOARD_SIZE - 1,3,ChessColor.WHITE);
+        initQueenOnBoard(0,3,ChessColor.BLACK);
+        initQueenOnBoard(CHESSBOARD_SIZE - 1,3,ChessColor.WHITE);
         initBishopOnBoard(0, 2, ChessColor.BLACK);
         initBishopOnBoard(0, CHESSBOARD_SIZE - 3, ChessColor.BLACK);
         initBishopOnBoard(CHESSBOARD_SIZE - 1, 2, ChessColor.WHITE);
@@ -95,8 +95,8 @@ public class Chessboard extends JComponent {
         initKnightOnBoard(0, CHESSBOARD_SIZE - 2, ChessColor.BLACK);
         initKnightOnBoard(CHESSBOARD_SIZE - 1, 1, ChessColor.WHITE);
         initKnightOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 2, ChessColor.WHITE);
-        initQueenOnBoard(0, 4, ChessColor.BLACK);
-        initQueenOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 4, ChessColor.WHITE);
+        initKingOnBoard(0, 4, ChessColor.BLACK);
+        initKingOnBoard(CHESSBOARD_SIZE - 1, CHESSBOARD_SIZE - 4, ChessColor.WHITE);
         for (int i = 0; i < 8; i++) {
             initPawnOnBoard(1, i, ChessColor.BLACK);
             initPawnOnBoard(CHESSBOARD_SIZE - 2, i, ChessColor.WHITE);
@@ -265,7 +265,7 @@ public class Chessboard extends JComponent {
         else if(chessData.get(8).charAt(0)=='b'){
             currentColor=ChessColor.BLACK;
         }
-
+        statuslabel.setText(currentColor.toString());
         repaint();
     }
 
