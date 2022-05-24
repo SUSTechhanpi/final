@@ -4,6 +4,7 @@ import controller.GameController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
 /**
  * 这个类表示游戏过程中的整个游戏界面，是一切的载体
@@ -33,6 +34,7 @@ public class ChessGameFrame extends JFrame {
         addRestartButton();
         addLoadButton();
         addSaveButton();
+        addRagretButton();
     }
 
 
@@ -96,6 +98,7 @@ public class ChessGameFrame extends JFrame {
     private void addSaveButton() {
         JButton button = new JButton("Save");
         button.addActionListener((e) ->{
+            gameController.savecessboard();
             JOptionPane.showMessageDialog(this, "Has Saved the ChessBoard");
         });
         button.setLocation(HEIGTH, HEIGTH / 10 + 360);
@@ -105,4 +108,18 @@ public class ChessGameFrame extends JFrame {
 
     }
 
+    private void addRagretButton() {
+        JButton button = new JButton("Regret");
+        String path = "c:\\project\\resource\\history.txt";
+        File file=new File(path);
+        button.addActionListener((e) ->{
+            JOptionPane.showMessageDialog(this, "Has Regreted the ChessBoard");
+            gameController.regret();
+        });
+        button.setLocation(HEIGTH, HEIGTH / 10 + 480);
+        button.setSize(200, 60);
+        button.setFont(new Font("Rockwell", Font.BOLD, 20));
+        add(button);
+
+    }
 }

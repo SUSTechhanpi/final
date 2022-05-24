@@ -6,8 +6,14 @@ import controller.ClickController;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * 这个类表示面板上的棋盘组件对象
@@ -25,6 +31,7 @@ public class Chessboard extends JComponent {
      * currentColor: 当前行棋方
      */
     private static final int CHESSBOARD_SIZE = 8;
+    Stack<String> stack = new Stack<>();
 
     private final ChessComponent[][] chessComponents = new ChessComponent[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     private ChessColor currentColor = ChessColor.WHITE;
@@ -95,6 +102,7 @@ public class Chessboard extends JComponent {
             initPawnOnBoard(CHESSBOARD_SIZE - 2, i, ChessColor.WHITE);
         }
 
+        currentColor=ChessColor.WHITE;
         repaint();
     }
 
@@ -126,6 +134,7 @@ public class Chessboard extends JComponent {
         chessComponents[row1][col1] = chess1;
         int row2 = chess2.getChessboardPoint().getX(), col2 = chess2.getChessboardPoint().getY();
         chessComponents[row2][col2] = chess2;
+        regret();
 
         whoWin();
         chess1.repaint();
@@ -204,9 +213,8 @@ public class Chessboard extends JComponent {
     public void loadGame(List<String> chessData) {
         chessData.forEach(System.out::println);
         initiateEmptyChessboard();
-        if (chessData.size()!=9) errorBoard();
         for (int i = 0; i < 8; i++) {
-            if (chessData.get(i).length()!=8) errorBoard();
+            if (chessData.get(i).length()!=8) errorBoard101();
         }
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -247,7 +255,7 @@ public class Chessboard extends JComponent {
                     initPawnOnBoard(i,j,ChessColor.WHITE);
                 }
                 else {
-                    errorBoard();
+                    errorBoard101();
                 }
             }
         }
@@ -261,15 +269,17 @@ public class Chessboard extends JComponent {
         repaint();
     }
 
-    public void errorBoard(){
+
+
+    public void errorBoard101(){
         //弹出一个弹窗告诉错误并重新load
     }
 
     public void saveBoard(){
-        String nowChessBoard = "";
+        String nowChessBoard = new String();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (currentColor==ChessColor.BLACK){
+                if (chessComponents[i][j].getChessColor()==ChessColor.WHITE){
                     if (chessComponents[i][j] instanceof KingChessComponent){
                         nowChessBoard += "k";
                     }
@@ -289,7 +299,7 @@ public class Chessboard extends JComponent {
                         nowChessBoard += "p";
                     }
                 }
-                else if (currentColor==ChessColor.WHITE){
+                else if (chessComponents[i][j].getChessColor()==ChessColor.BLACK){
                     if (chessComponents[i][j] instanceof KingChessComponent){
                         nowChessBoard += "K";
                     }
@@ -309,7 +319,134 @@ public class Chessboard extends JComponent {
                         nowChessBoard += "P";
                     }
                 }
+                else {
+                    nowChessBoard +="0";
+                }
+            }
+            nowChessBoard +="\n";
+        }
+        if (currentColor==ChessColor.BLACK){
+            nowChessBoard+="b";
+        }
+        else if (currentColor==ChessColor.WHITE){
+            nowChessBoard+="w";
+        }
+        nowChessBoard +="\n";
+        setupTXT(nowChessBoard);
+    }
+
+    public void setupTXT(String a){
+        String path = "c:\\project\\resource\\save.txt";
+        File file=new File(path);
+        if (!file.exists()){
+            file.getParentFile().mkdirs();
+        }
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(file,true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bw = new BufferedWriter(fw);
+        try {
+            bw.write(a);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            bw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void regret(){
+        String nowChessBoard = new String();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (chessComponents[i][j].getChessColor()==ChessColor.WHITE){
+                    if (chessComponents[i][j] instanceof KingChessComponent){
+                        nowChessBoard += "k";
+                    }
+                    else if (chessComponents[i][j] instanceof QueenChessComponent){
+                        nowChessBoard += "q";
+                    }
+                    else if (chessComponents[i][j] instanceof BishopChessComponent){
+                        nowChessBoard += "b";
+                    }
+                    else if (chessComponents[i][j] instanceof RookChessComponent){
+                        nowChessBoard += "r";
+                    }
+                    else if (chessComponents[i][j] instanceof KnightChessComponent){
+                        nowChessBoard += "n";
+                    }
+                    else if (chessComponents[i][j] instanceof PawnChessComponent){
+                        nowChessBoard += "p";
+                    }
+                }
+                else if (chessComponents[i][j].getChessColor()==ChessColor.BLACK){
+                    if (chessComponents[i][j] instanceof KingChessComponent){
+                        nowChessBoard += "K";
+                    }
+                    else if (chessComponents[i][j] instanceof QueenChessComponent){
+                        nowChessBoard += "Q";
+                    }
+                    else if (chessComponents[i][j] instanceof BishopChessComponent){
+                        nowChessBoard += "B";
+                    }
+                    else if (chessComponents[i][j] instanceof RookChessComponent){
+                        nowChessBoard += "R";
+                    }
+                    else if (chessComponents[i][j] instanceof KnightChessComponent){
+                        nowChessBoard += "N";
+                    }
+                    else if (chessComponents[i][j] instanceof PawnChessComponent){
+                        nowChessBoard += "P";
+                    }
+                }
+                else {
+                    nowChessBoard +="0";
+                }
             }
         }
+        if (currentColor==ChessColor.BLACK){
+            nowChessBoard+="w";
+        }
+        else if (currentColor==ChessColor.WHITE){
+            nowChessBoard+="b";
+        }
+        stack.push(nowChessBoard);
+    }
+
+    public void clickregret(){
+        stack.pop();
+        List<String> board=new ArrayList<>();
+        String regretboard=stack.peek();
+        for (int i = 0; i < 8; i++) {
+            String k = "";
+            for (int j = 0; j < 8; j++) {
+                k += regretboard.charAt(i*8+j);
+            }
+            board.add(k);
+        }
+        board.add(String.valueOf(regretboard.charAt(64)));
+        loadGame(board);
+
     }
 }

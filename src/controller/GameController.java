@@ -13,6 +13,15 @@ public class GameController {
     };
     private Chessboard chessboard;
 
+    public void savecessboard(){
+        chessboard.saveBoard();
+    }
+
+    public void regret(){
+        chessboard.clickregret();
+    }
+
+
     public GameController(Chessboard chessboard) {
         this.chessboard = chessboard;
     }
@@ -27,5 +36,7 @@ public class GameController {
         }
         return null;
     }
+
+
 
 }
