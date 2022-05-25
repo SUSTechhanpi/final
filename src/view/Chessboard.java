@@ -407,7 +407,7 @@ public class Chessboard extends JComponent {
         try {
             file.createNewFile();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace() ;
         }
 
         FileWriter fw = null;
