@@ -13,7 +13,7 @@ import java.util.List;
  * 这个类是一个抽象类，主要表示8*8棋盘上每个格子的棋子情况，当前有两个子类继承它，分别是EmptySlotComponent(空棋子)和RookChessComponent(车)。
  */
 public abstract class ChessComponent extends JComponent {
-
+    public int count = 0;
     /**
      * CHESSGRID_SIZE: 主要用于确定每个棋子在页面中显示的大小。
      * <br>
@@ -23,7 +23,7 @@ public abstract class ChessComponent extends JComponent {
      */
 
 //    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);
-    private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK};
+    private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK,Color.PINK, Color.CYAN};
     /**
      * handle click event
      */
@@ -39,6 +39,7 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
     private boolean selected;
+    private boolean moveEntered = false;
 
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -97,6 +98,14 @@ public abstract class ChessComponent extends JComponent {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);
         }
+        if (e.getID() == MouseEvent.MOUSE_ENTERED){
+            moveEntered = true;
+            this.repaint();
+        }
+        if (e.getID() == MouseEvent.MOUSE_EXITED){
+            moveEntered = false;
+            this.repaint();
+        }
     }
 
     /**
@@ -119,8 +128,9 @@ public abstract class ChessComponent extends JComponent {
     protected void paintComponent(Graphics g) {
         super.paintComponents(g);
         System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
-        Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
+        Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2 + count];
         g.setColor(squareColor);
+        g.drawRect(0, 0, getWidth(), getHeight());
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 

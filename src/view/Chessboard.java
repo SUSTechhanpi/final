@@ -32,6 +32,16 @@ public class Chessboard extends JComponent {
      */
     private static final int CHESSBOARD_SIZE = 8;
     Stack<String> stack = new Stack<>();
+    int whiteWin = 0;
+    int blackWin = 0;
+
+    public int getWhiteWin() {
+        return whiteWin;
+    }
+
+    public int getBlackWin() {
+        return blackWin;
+    }
 
     private final ChessComponent[][] chessComponents = new ChessComponent[CHESSBOARD_SIZE][CHESSBOARD_SIZE];
     private ChessColor currentColor = ChessColor.WHITE;
@@ -136,6 +146,10 @@ public class Chessboard extends JComponent {
         chessComponents[row2][col2] = chess2;
         regret();
 
+        Music music = new Music(1);
+        Thread bgmThread = new Thread(music);
+        bgmThread.start();
+
         whoWin();
         chess1.repaint();
         chess2.repaint();
@@ -155,8 +169,10 @@ public class Chessboard extends JComponent {
         if (king!=2){
             if (white==1){
                 JOptionPane.showMessageDialog(null,"White win","win",1);
+                whiteWin +=1;
             }
-            else JOptionPane.showMessageDialog(null,"Black win","win",1);
+            else {JOptionPane.showMessageDialog(null,"Black win","win",1);
+                blackWin+=1;}
         }
         statuslabel.setText(currentColor.toString());
     }

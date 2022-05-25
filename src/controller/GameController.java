@@ -20,7 +20,10 @@ public class GameController {
     public void regret(){
         chessboard.clickregret();
     }
-
+    public int getcolor(){
+        int w=chessboard.getWhiteWin();
+        return w;
+    }
 
     public GameController(Chessboard chessboard) {
         this.chessboard = chessboard;

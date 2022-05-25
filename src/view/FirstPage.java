@@ -1,15 +1,20 @@
 package view;
 
+import controller.GameController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class FirstPage extends JFrame implements ActionListener{
     private final int WIDTH;
     private final int HEIGHT;
     private JPanel panel;
     private JLabel label;
+
+    private GameController gameController;
 
     public int getWIDTH() {
         return WIDTH;
@@ -54,10 +59,10 @@ public class FirstPage extends JFrame implements ActionListener{
 
 
         BeginButton();
-        ChangeBackground();
+        addLoadButton();
 
 
-        addBackground("./images/background.png");
+        addBackground("./images/background4.gif");
 
         this.add(panel);
 
@@ -66,27 +71,43 @@ public class FirstPage extends JFrame implements ActionListener{
     }
 
     private void BeginButton(){
-        JButton beginButton = new JButton("开始游戏！");
-        beginButton.setLocation(150,150);
+        JButton beginButton = new JButton("Play");
+        beginButton.setLocation(150,170);
         beginButton.setSize(200,60);
-        beginButton.setFont(new Font("楷体",Font.BOLD,20));
+        beginButton.setFont(new Font("Blackadder ITC",Font.PLAIN,30));
         panel.add(beginButton);
         panel.repaint();
 
         beginButton.addActionListener(this);
     }
 
-    private void ChangeBackground(){
-        JButton changeBackground = new JButton("更改背景");
-        changeBackground.setBounds(150,250,200,60);
-        changeBackground.setFont(new Font("楷体",Font.BOLD,20));
+    private void addLoadButton(){
+        JButton button = new JButton("Load");
+        button.setBounds(150,270,200,60);
+        button.setFont(new Font("Blackadder ITC", Font.PLAIN, 30));
 
-        changeBackground.addActionListener(new ChangeListener(this));
+        JFileChooser fileDialog = new JFileChooser();
+        view.FirstPage gf = this;
+        final File[] file = new File[1];
+        boolean w = true;
 
+//        if (file.toString().charAt(file.length-1)!='t'){
+//            JOptionPane.showMessageDialog(null,"104","Error",1);
+//            w =false;
+//        }
+//
+        button.addActionListener(e -> {
+            System.out.println("Click load");
+            //            String path = JOptionPane.showInputDialog(this, "Input Path here");
+            int returnVal = fileDialog.showOpenDialog(gf);
+            //            if (path.charAt(path.length()-1)!='t') JOptionPane.showMessageDialog(null,"104","Error",1);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                file[0] = fileDialog.getSelectedFile();
+            }
+            gameController.loadGameFromFile(file[0].getAbsolutePath());
+        });
 
-
-        changeBackground.setVisible(true);
-        panel.add(changeBackground);
+        panel.add(button);
         panel.repaint();
     }
 
@@ -106,7 +127,11 @@ public class FirstPage extends JFrame implements ActionListener{
 
 
     public static void main(String[] args) {
-        new FirstPage(500,500);
+        FirstPage firstPage=new FirstPage(500,500);
+        firstPage.setLocationRelativeTo(null);
+        Music music = new Music(0);
+        Thread bgmThread = new Thread(music);
+        bgmThread.start();
     }
 
     @Override
