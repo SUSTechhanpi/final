@@ -143,17 +143,22 @@ public class Chessboard extends JComponent {
 
     public void whoWin(){
         int king=0;
+        int white = 0;
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (chessComponents[i][j] instanceof KingChessComponent){
                     king++;
+                    if (chessComponents[i][j].getChessColor()==ChessColor.WHITE) white+=1;
                 }
             }
         }
         if (king!=2){
-            initialGame();
+            if (white==1){
+                JOptionPane.showMessageDialog(null,"White win","win",1);
+            }
+            else JOptionPane.showMessageDialog(null,"Black win","win",1);
         }
-//加标签
+        statuslabel.setText(currentColor.toString());
     }
 
     public void initiateEmptyChessboard() {
@@ -212,68 +217,123 @@ public class Chessboard extends JComponent {
 
     public void loadGame(List<String> chessData) {
         chessData.forEach(System.out::println);
-        initiateEmptyChessboard();
-        for (int i = 0; i < 8; i++) {
-            if (chessData.get(i).length()!=8) errorBoard101();
-        }
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (chessData.get(i).charAt(j)=='K'){
-                    initKingOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='k'){
-                    initKingOnBoard(i,j,ChessColor.WHITE);
-                }
-                else if (chessData.get(i).charAt(j)=='Q'){
-                    initQueenOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='q'){
-                    initQueenOnBoard(i,j,ChessColor.WHITE);
-                }
-                else if (chessData.get(i).charAt(j)=='B'){
-                    initBishopOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='b'){
-                    initBishopOnBoard(i,j,ChessColor.WHITE);
-                }
-                else if (chessData.get(i).charAt(j)=='N'){
-                    initKnightOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='n'){
-                    initKnightOnBoard(i,j,ChessColor.WHITE);
-                }
-                else if (chessData.get(i).charAt(j)=='R'){
-                    initRookOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='r'){
-                    initRookOnBoard(i,j,ChessColor.WHITE);
-                }
-                else if (chessData.get(i).charAt(j)=='P'){
-                    initPawnOnBoard(i,j,ChessColor.BLACK);
-                }
-                else if (chessData.get(i).charAt(j)=='p'){
-                    initPawnOnBoard(i,j,ChessColor.WHITE);
-                }
-                else {
-                    errorBoard101();
-                }
+        boolean in = true;
+        for (int i = 0; i < chessData.size()-1; i++) {
+            if (chessData.get(i).length()!=8){
+                in = false;
+                errorBoard101();
             }
         }
-        if (chessData.get(8).charAt(0)=='w'){
-            currentColor=ChessColor.WHITE;
+        if (in==true){
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (chessData.get(i).charAt(j) == 'K') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'k') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'Q') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'q') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'B') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'b') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'N') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'n') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'R') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'r') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'P') {
+                        continue;
+                    } else if (chessData.get(i).charAt(j) == 'p') {
+                        continue;
+                    }
+                    else {in=false;}
+                }
+            }
+            if (in==true){
+                if (chessData.get(chessData.size()).charAt(0)!='w'||chessData.get(chessData.size()).charAt(0)!='b'){
+                    in = false;
+                    errorBoard103();
+                }
+            }
+            else if(in==false) {
+                errorBoard102();
+            }
         }
-        else if(chessData.get(8).charAt(0)=='b'){
-            currentColor=ChessColor.BLACK;
+        if (in==true){
+            initiateEmptyChessboard();
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (chessData.get(i).charAt(j)=='K'){
+                        initKingOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='k'){
+                        initKingOnBoard(i,j,ChessColor.WHITE);
+                    }
+                    else if (chessData.get(i).charAt(j)=='Q'){
+                        initQueenOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='q'){
+                        initQueenOnBoard(i,j,ChessColor.WHITE);
+                    }
+                    else if (chessData.get(i).charAt(j)=='B'){
+                        initBishopOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='b'){
+                        initBishopOnBoard(i,j,ChessColor.WHITE);
+                    }
+                    else if (chessData.get(i).charAt(j)=='N'){
+                        initKnightOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='n'){
+                        initKnightOnBoard(i,j,ChessColor.WHITE);
+                    }
+                    else if (chessData.get(i).charAt(j)=='R'){
+                        initRookOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='r'){
+                        initRookOnBoard(i,j,ChessColor.WHITE);
+                    }
+                    else if (chessData.get(i).charAt(j)=='P'){
+                        initPawnOnBoard(i,j,ChessColor.BLACK);
+                    }
+                    else if (chessData.get(i).charAt(j)=='p'){
+                        initPawnOnBoard(i,j,ChessColor.WHITE);
+                    }
+                }
+            }
+
+            if (chessData.get(8).charAt(0)=='w'){
+                currentColor=ChessColor.WHITE;
+            }
+            else if(chessData.get(8).charAt(0)=='b'){
+                currentColor=ChessColor.BLACK;
+            }
+
+            statuslabel.setText(currentColor.toString());
+            repaint();
         }
-        statuslabel.setText(currentColor.toString());
-        repaint();
     }
+
+
 
 
 
     public void errorBoard101(){
-        //弹出一个弹窗告诉错误并重新load
+        JOptionPane.showMessageDialog(null,"101","Error",1);
     }
+    public void errorBoard102(){
+        JOptionPane.showMessageDialog(null,"102","Error",1);
+    }
+    public void errorBoard103(){
+        JOptionPane.showMessageDialog(null,"103","Error",1);
+    }
+
 
     public void saveBoard(){
         String nowChessBoard = new String();

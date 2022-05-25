@@ -91,9 +91,12 @@ public class ChessGameFrame extends JFrame {
         button.addActionListener(e -> {
             System.out.println("Click load");
             String path = JOptionPane.showInputDialog(this, "Input Path here");
+            if (path.charAt(path.length()-1)!='t') JOptionPane.showMessageDialog(null,"104","Error",1);
             gameController.loadGameFromFile(path);
         });
     }
+
+
 
     private void addSaveButton() {
         JButton button = new JButton("Save");
