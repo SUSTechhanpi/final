@@ -218,10 +218,11 @@ public class Chessboard extends JComponent {
     public void loadGame(List<String> chessData) {
         chessData.forEach(System.out::println);
         boolean in = true;
-        for (int i = 0; i < chessData.size()-1; i++) {
+        for (int i = 0; i < chessData.size()-2; i++) {
             if (chessData.get(i).length()!=8){
                 in = false;
                 errorBoard101();
+                break;
             }
         }
         if (in==true){
@@ -251,12 +252,14 @@ public class Chessboard extends JComponent {
                         continue;
                     } else if (chessData.get(i).charAt(j) == 'p') {
                         continue;
+                    }else if (chessData.get(i).charAt(j) == '0'){
+                        continue;
                     }
                     else {in=false;}
                 }
             }
             if (in==true){
-                if (chessData.get(chessData.size()).charAt(0)!='w'||chessData.get(chessData.size()).charAt(0)!='b'){
+                if (chessData.get(chessData.size()-1).charAt(0)!='w'&&chessData.get(chessData.size()-1).charAt(0)!='b'){
                     in = false;
                     errorBoard103();
                 }

@@ -6,3 +6,4 @@ PPPPPP0P
 00000000
 ppppp0pp
 rnbqkbnr
+e
